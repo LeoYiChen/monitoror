@@ -7,29 +7,29 @@ source ./scripts/.variables
 
 # Check param or use default
 if [[ $# -eq 1 ]]; then
-  if [[ $1 == "windows" ]]; then
-    export GOOS=windows
-    export GOARCH=amd64
-  elif [[ $1 == "linux" ]]; then
+  if [[ $1 == "linux/amd64" ]]; then
     export GOOS=linux
+    export GOARCH=amd64
+  elif [[ $1 == "linux/ARMv5" ]]; then
+    export GOOS=linux
+    export GOARCH=arm
+    export GOARM=5
+  elif [[ $1 == "windows" ]]; then
+    export GOOS=windows
     export GOARCH=amd64
   elif [[ $1 == "macos" ]]; then
     export GOOS=darwin
     export GOARCH=amd64
-  elif [[ $1 == "raspberrypi" ]]; then
-    export GOOS=linux
-    export GOARCH=arm
-    export GOARM=5
   fi
 fi
 
 # Define Target name
 if [[ $GOOS == "windows" ]]; then
-  TARGET="binaries/monitoror-$GOOS-$GOARCH.exe"
+  TARGET="binaries/monitoror-$GOOS-$GOARCH-$VERSION.exe"
 elif [[ $GOOS == "darwin" ]]; then
-  TARGET="binaries/monitoror-macos"
+  TARGET="binaries/monitoror-macos-$VERSION"
 else
-  TARGET="binaries/monitoror-$GOOS-$GOARCH"
+  TARGET="binaries/monitoror-$GOOS-$GOARCH-$VERSION"
 fi
 
 export LDFLAGS="\

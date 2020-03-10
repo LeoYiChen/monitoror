@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+# Do not use this script manually, Use makefile
+set -eu -o pipefail
+
+source ./scripts/.variables
+
+docker build -t "monitoror/monitoror:${VERSION}" --build-arg VERSION=${VERSION} .

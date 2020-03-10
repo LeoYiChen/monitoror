@@ -48,15 +48,20 @@ build: ## build executable for current environment
 .PHONY: build-cross
 build-cross: ## build all executables
 	@./scripts/build/rice
-	@./scripts/build/build linux
+	@./scripts/build/build linux/amd64
+	@./scripts/build/build linux/ARMv5
 	@./scripts/build/build windows
 	@./scripts/build/build macos
-	@./scripts/build/build raspberrypi
 
-.PHONY: build-linux
-build-linux: ## build executable for Linux
+.PHONY: build-linux-amd64
+build-linux-amd64: ## build executable for Linux
 	@./scripts/build/rice
-	@./scripts/build/build linux
+	@./scripts/build/build linux/amd64
+
+.PHONY: build-linux-ARMv5
+build-linux-ARMv5: ## build executable for Raspberry Pi (ARM V5)
+	@./scripts/build/rice
+	@./scripts/build/build linux/ARMv5
 
 .PHONY: build-windows
 build-windows: ## build executable for Windows
@@ -68,43 +73,16 @@ build-macos: ## build executable for MacOs
 	@./scripts/build/rice
 	@./scripts/build/build macos
 
-.PHONY: build-raspberrypi
-build-raspberrypi: ## build executable for Raspberry Pi
-	@./scripts/build/rice
-	@./scripts/build/build raspberrypi
+.PHONY: build-docker
+build-docker: build-linux-amd64 ## build docker image based on linux/amd64 binariy
+	@./scripts/build/docker
+
+# ============= BUILDS FAKER (for demo) =============
 
 .PHONY: build-faker
 build-faker: ## build faker executable for current environment
 	@./scripts/build/rice
 	@./scripts/build/faker
-
-.PHONY: build-faker-cross
-build-faker-cross: ## build all faker executables
-	@./scripts/build/rice
-	@./scripts/build/faker linux
-	@./scripts/build/faker windows
-	@./scripts/build/faker macos
-	@./scripts/build/faker raspberrypi
-
-.PHONY: build-faker-linux
-build-faker-linux: ## build faker executable for Linux
-	@./scripts/build/rice
-	@./scripts/build/faker linux
-
-.PHONY: build-faker-windows
-build-faker-windows: ## build faker executable for Windows
-	@./scripts/build/rice
-	@./scripts/build/faker windows
-
-.PHONY: build-faker-macos
-build-faker-macos: ## build faker executable for MacOs
-	@./scripts/build/rice
-	@./scripts/build/faker macos
-
-.PHONY: build-faker-raspberrypi
-build-faker-raspberrypi: ## build faker executable for Raspberry Pi
-	@./scripts/build/rice
-	@./scripts/build/faker raspberrypi
 
 # ============= RUN =============
 .PHONY: run
@@ -124,7 +102,6 @@ version: ## bump version of monitoror
 .PHONY: clean
 clean: ## remove build artifacts
 	rm -rf ./binaries/*
-	@go clean ./...
 
 .PHONY: install
 install: ## installing tools / dependencies
